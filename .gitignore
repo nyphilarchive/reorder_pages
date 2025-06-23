@@ -1,0 +1,11 @@
+# Log and cache files
+*.csv
+*.json
+*.txt
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Environment config
+.env
