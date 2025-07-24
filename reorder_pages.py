@@ -25,7 +25,8 @@ TOKEN = None
 HEADERS = {}
 COOKIE_TOKEN = None
 
-SUBTYPES = ["Concert Program", "Score", "Part", "Business Document", "Press Clippings"]
+# SUBTYPES = ["Concert Program", "Score", "Part", "Business Document", "Press Clippings"]
+SUBTYPES = ["Score", "Part", "Business Document", "Press Clippings"]
 
 def get_token():
     global TOKEN, HEADERS, COOKIE_TOKEN
@@ -192,6 +193,8 @@ def process_folder(parent_uid, parent_record_id):
         print(f"✅ {parent_uid}: already in correct order")
         with open(ALREADY_ORDERED_FILE, "a") as f:
             f.write(parent_uid + "\n")
+        with open(PROCESSED_FOLDERS_FILE, "a") as f:
+            f.write(parent_uid + "\n")
         os.remove(cache_file)
         return
     print(f"📑 Reordering {len(pages)} pages...")
@@ -218,6 +221,7 @@ def get_all_parent_folders():
             query_encoded = urllib.parse.quote(query)
             url = (
                 f"{BASE_URL}/API/search/v3.0/search?query={query_encoded}"
+                f"&sort=file name"
                 f"&fields=CoreField.Unique-Identifier,RecordID,ChildCount&countperpage=300&format=json&pagenumber={page}"
             )
             resp = requests.get(url, headers=HEADERS)
